@@ -1,9 +1,8 @@
-package com.example.Producttmanagement.controller;
+package com.example.productmanagement.controller;
 
 import com.example.productmanagement.model.Product;
 import com.example.productmanagement.service.ProductService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController

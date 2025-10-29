@@ -1,6 +1,6 @@
-package com.example.Producttmanagement.service;
+package com.example.productmanagement.service;
 
-import com.example.productmanagement.dto.ProductDto;
+import com.example.productmanagement.Dto.ProductDto;
 import com.example.productmanagement.exception.ProductNotFoundException;
 import com.example.productmanagement.model.Category;
 import com.example.productmanagement.model.Product;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
     private final CategoryRepository categoryRepo;
@@ -31,6 +31,7 @@ public class ProductServiceImpl {
     }
 
     @Transactional
+    @Override
     public Product create(ProductDto dto) {
         Product product = modelMapper.map(dto, Product.class);
 
@@ -38,11 +39,8 @@ public class ProductServiceImpl {
             Category category = categoryRepo.findById(dto.getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Category not found with id " + dto.getCategoryId()));
             product.setCategory(category);
-        } else {
-            product.setCategory(null);
         }
 
-        // ensure stock default
         if (product.getStock() == null) {
             product.setStock(0);
         }
@@ -51,11 +49,11 @@ public class ProductServiceImpl {
     }
 
     @Transactional
+    @Override
     public Product update(Long id, ProductDto dto) {
         Product existing = productRepo.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + id));
 
-        // map fields from DTO to entity (preserve other fields)
         if (dto.getName() != null) existing.setName(dto.getName());
         if (dto.getDescription() != null) existing.setDescription(dto.getDescription());
         if (dto.getPrice() != null) existing.setPrice(dto.getPrice());
@@ -63,29 +61,29 @@ public class ProductServiceImpl {
 
         if (dto.getCategoryId() != null) {
             Category category = categoryRepo.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new IllegalArgumentException("Category not found with id " + dto.getCategoryId()));
+                    .orElseThrow(() -> new IllegalArgumentException("Category not found"));
             existing.setCategory(category);
         }
 
         return productRepo.save(existing);
     }
 
+    @Override
     public Optional<Product> getById(Long id) {
         return productRepo.findById(id);
     }
 
+    @Override
     public List<Product> listAll() {
         return productRepo.findAll();
     }
 
+    @Override
     public Page<Product> list(Pageable pageable) {
         return productRepo.findAll(pageable);
     }
 
-    public List<Product> search(String query) {
-        return productRepo.searchByNameOrDescription(query);
-    }
-
+    @Override
     public void delete(Long id) {
         if (!productRepo.existsById(id)) {
             throw new ProductNotFoundException("Product not found with id " + id);
@@ -93,11 +91,23 @@ public class ProductServiceImpl {
         productRepo.deleteById(id);
     }
 
-    public List<Product> findByCategoryName(String categoryName) {
-        return productRepo.findByCategory_NameIgnoreCase(categoryName);
+    @Override
+    public List<Product> getAllProducts() {
+        return List.of();
     }
 
-    public List<Product> findByPriceLessThan(double price) {
-        return productRepo.findByPriceLessThan(price);
+    @Override
+    public Product getProductById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Product saveProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
     }
 }

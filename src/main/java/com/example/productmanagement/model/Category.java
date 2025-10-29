@@ -1,4 +1,4 @@
-package com.example.Producttmanagement.model;
+package com.example.productmanagement.model;
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -15,5 +15,4 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
-    // Getters and Setters
 }

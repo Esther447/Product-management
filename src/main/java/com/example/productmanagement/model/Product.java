@@ -1,4 +1,4 @@
-package com.example.Producttmanagement.model;
+package com.example.productmanagement.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -13,13 +13,12 @@ public class Product {
     private String name;
     private BigDecimal price;
     private String description;
+    private Integer stock;   // ✅ add this
 
-    // Example: link to Category
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -31,6 +30,9 @@ public class Product {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
